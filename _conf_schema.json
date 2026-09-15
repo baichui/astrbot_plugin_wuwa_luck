@@ -1,0 +1,496 @@
+{
+  "wuwa_deed_chance": {
+    "description": "宜忌出现鸣潮文案的概率",
+    "hint": "全卡最多1条鸣潮宜/忌",
+    "type": "float",
+    "slider": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    "default": 0.3
+  },
+  "metric_labels": {
+    "description": "谐振指数条目",
+    "hint": "留空默认：限定池/武器池/声骸调谐",
+    "type": "list",
+    "default": []
+  },
+  "character_weights": {
+    "description": "各角色出现权重",
+    "hint": "0=不出现；小爱默认80，其余默认1；概率=权重/总和。",
+    "type": "object",
+    "items": {
+      "小爱": {
+        "description": "小爱",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 80
+      },
+      "今汐": {
+        "description": "今汐",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "长离": {
+        "description": "长离",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "椿": {
+        "description": "椿",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "守岸人": {
+        "description": "守岸人",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "维里奈": {
+        "description": "维里奈",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "安可": {
+        "description": "安可",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "秧秧": {
+        "description": "秧秧",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "白芷": {
+        "description": "白芷",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "卡卡罗": {
+        "description": "卡卡罗",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "吟霖": {
+        "description": "吟霖",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "忌炎": {
+        "description": "忌炎",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "散华": {
+        "description": "散华",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "洛可可": {
+        "description": "洛可可",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "菲比": {
+        "description": "菲比",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "赞妮": {
+        "description": "赞妮",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "露帕": {
+        "description": "露帕",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "炽霞": {
+        "description": "炽霞",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "折枝": {
+        "description": "折枝",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "相里要": {
+        "description": "相里要",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "达妮娅": {
+        "description": "达妮娅",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "千咲": {
+        "description": "千咲",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "尤诺": {
+        "description": "尤诺",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "漂泊者": {
+        "description": "漂泊者",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "莫特斐": {
+        "description": "莫特斐",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "釉瑚": {
+        "description": "釉瑚",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "珂莱塔": {
+        "description": "珂莱塔",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "绯雪": {
+        "description": "绯雪",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "洛瑟菈": {
+        "description": "洛瑟菈",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "穗穗": {
+        "description": "穗穗",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "布兰特": {
+        "description": "布兰特",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "莫宁": {
+        "description": "莫宁",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "渊武": {
+        "description": "渊武",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "秋水": {
+        "description": "秋水",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "鉴心": {
+        "description": "鉴心",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "夏空": {
+        "description": "夏空",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "丽贝卡": {
+        "description": "丽贝卡",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "灯灯": {
+        "description": "灯灯",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "仇远": {
+        "description": "仇远",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "琳奈": {
+        "description": "琳奈",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "陆·赫斯": {
+        "description": "陆·赫斯",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "露西": {
+        "description": "露西",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "桃祈": {
+        "description": "桃祈",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "丹瑾": {
+        "description": "丹瑾",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "景燃": {
+        "description": "景燃",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "清宵": {
+        "description": "清宵",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      },
+      "凌阳": {
+        "description": "凌阳",
+        "type": "int",
+        "slider": {
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        "default": 1
+      }
+    }
+  }
+}
