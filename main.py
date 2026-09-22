@@ -5,9 +5,9 @@ import importlib.util
 import sys
 from pathlib import Path
 
-from astrbot.api import star
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.message_components import At, Image
+from astrbot.api.star import Context, Star, register
 
 _PLUGIN_DIR = Path(__file__).resolve().parent
 if str(_PLUGIN_DIR) not in sys.path:
@@ -34,14 +34,20 @@ get_image = _image_mod.get_image
 _updater = _load_local("updater")
 
 
-class WUWALuck(star.Star):
-    """鸣潮主题今日运势（白底卡片）。
+@register(
+    "wuwa_luck",
+    "baichui",
+    "鸣潮主题今日运势白底卡片",
+    "1.0.1",
+    "https://github.com/baichui/astrbot_plugin_wuwa_luck",
+)
+class WuwaLuckPlugin(Star):
+    """鸣潮主题今日运势。
 
     指令：/luck /今日运势 /更新luck
-    WebUI 可配置：各角色权重、鸣潮宜忌概率、谐振指数文案。
     """
 
-    def __init__(self, context: star.Context, config: dict | None = None) -> None:
+    def __init__(self, context: Context, config: dict):
         super().__init__(context)
         self.config = config or {}
 
@@ -96,7 +102,6 @@ class WUWALuck(star.Star):
         return uid, nickname[:16]
 
     def _cfg_weights(self) -> dict[str, float]:
-        """读取 character_weights 下各角色 0-100 权重。"""
         raw = self.config.get("character_weights") or {}
         out: dict[str, float] = {}
         if not isinstance(raw, dict):
@@ -127,7 +132,7 @@ class WUWALuck(star.Star):
                 metric_labels=metrics or None,
             )
         except Exception as e:  # noqa: BLE001
-            yield event.plain_result(f"运势图生成失败：{e}")
+            await event.send(event.plain_result(f"运势图生成失败：{e}"))
             return
 
         chain: list = []
@@ -137,7 +142,7 @@ class WUWALuck(star.Star):
             except Exception:  # noqa: BLE001
                 pass
         chain.append(Image.fromBytes(data))
-        yield event.chain_result(chain)
+        await event.send(event.chain_result(chain))
 
     @filter.command("更新luck", alias={"更新运势", "luck更新"})
     async def update_luck(self, event: AstrMessageEvent):
@@ -145,6 +150,6 @@ class WUWALuck(star.Star):
         try:
             msg = await _updater.update_plugin("astrbot")
         except Exception as e:  # noqa: BLE001
-            yield event.plain_result(f"更新失败：{e}")
+            await event.send(event.plain_result(f"更新失败：{e}"))
             return
-        yield event.plain_result(msg + "\n如代码有改动，请重载插件或重启 AstrBot。")
+        await event.send(event.plain_result(msg + "\n如代码有改动，请重载插件或重启 AstrBot。"))
