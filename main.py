@@ -8,6 +8,7 @@ from pathlib import Path
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.message_components import At, Image
 from astrbot.api.star import Context, Star, register
+from astrbot.core.star.filter.event_message_type import EventMessageType
 
 _PLUGIN_DIR = Path(__file__).resolve().parent
 if str(_PLUGIN_DIR) not in sys.path:
@@ -118,9 +119,30 @@ class WuwaLuckPlugin(Star):
                 out[name] = w
         return out
 
-    @filter.command("luck", alias={"今日运势"})
-    async def luck(self, event: AstrMessageEvent):
-        """生成今日运势图"""
+    _LUCK_CMDS = {"luck", "今日运势"}
+    _UPDATE_CMDS = {"更新luck", "更新运势", "luck更新"}
+
+    @filter.event_message_type(EventMessageType.ALL)
+    async def on_message(self, event: AstrMessageEvent, *args, **kwargs):
+        """直触：不依赖 wake_prefix（同千小妹全局拦截）"""
+        raw = (event.message_str or "").strip()
+        if not raw:
+            return
+        text = raw
+        for p in ("#", "/", "小爱 ", "爱弥斯 ", "姬妻人 "):
+            if text.startswith(p):
+                text = text[len(p) :].strip()
+                break
+        text = text.strip()
+        if text in self._UPDATE_CMDS:
+            await self._do_update(event)
+            event.stop_event()
+            return
+        if text in self._LUCK_CMDS:
+            await self._do_luck(event)
+            event.stop_event()
+
+    async def _do_luck(self, event: AstrMessageEvent):
         uid, nickname = self._sender(event)
         metrics = self._cfg_list("metric_labels")
         try:
@@ -144,9 +166,7 @@ class WuwaLuckPlugin(Star):
         chain.append(Image.fromBytes(data))
         await event.send(event.chain_result(chain))
 
-    @filter.command("更新luck", alias={"更新运势", "luck更新"})
-    async def update_luck(self, event: AstrMessageEvent):
-        """从 GitHub 更新本插件（保留配置）"""
+    async def _do_update(self, event: AstrMessageEvent):
         try:
             msg = await _updater.update_plugin("astrbot")
         except Exception as e:  # noqa: BLE001
