@@ -49,28 +49,52 @@ def _font(path: Path, size: int) -> ImageFont.FreeTypeFont:
 
 
 def _pick_fonts() -> dict[str, Path]:
-    win = Path(r"C:\Windows\Fonts")
-    # sans 优先雅黑 Regular：NotoSans VF 在 PIL 下常偏细
-    candidates = {
-        "serif": [win / "NotoSerifSC-VF.ttf", win / "simsun.ttc", win / "simhei.ttf"],
-        "sans": [win / "msyh.ttc", win / "NotoSansSC-VF.ttf", win / "simhei.ttf"],
-        "bold": [win / "msyhbd.ttc", win / "simhei.ttf", win / "NotoSansSC-VF.ttf"],
-    }
-    for key, extra in (
-        ("serif", TTF / "NotoSerifSC-VF.ttf"),
-        ("sans", TTF / "MiSansVF.ttf"),
-        ("bold", TTF / "NotoSansSC-VF.ttf"),
+    """按 OS 常见字体目录查找；插件 ttf/ 作兜底。"""
+    dirs: list[Path] = []
+    for d in (
+        Path(r"C:\Windows\Fonts"),
+        Path("/usr/share/fonts"),
+        Path("/usr/local/share/fonts"),
+        Path.home() / ".fonts",
+        Path("/System/Library/Fonts"),
+        Path("/Library/Fonts"),
+        Path.home() / "Library" / "Fonts",
+        TTF,
     ):
-        candidates[key].append(extra)
-    out: dict[str, Path] = {}
-    for key, paths in candidates.items():
-        for p in paths:
-            if p.exists():
-                out[key] = p
-                break
-        else:
-            out[key] = win / "msyh.ttc"
-    return out
+        if d.exists():
+            dirs.append(d)
+
+    def _find(names: list[str]) -> Path | None:
+        for name in names:
+            for d in dirs:
+                p = d / name
+                if p.is_file():
+                    return p
+            # 子目录里再找一层（Linux 发行版常见）
+            for d in dirs:
+                for p in d.rglob(name):
+                    if p.is_file():
+                        return p
+        return None
+
+    sans = _find([
+        "msyh.ttc", "Microsoft YaHei.ttc",
+        "NotoSansSC-VF.ttf", "NotoSansSC-Regular.otf", "NotoSansCJK-Regular.ttc",
+        "SourceHanSansCN-Regular.otf", "WenQuanYi Micro Hei.ttf", "wqy-microhei.ttc",
+        "PingFang.ttc", "Hiragino Sans GB.ttc", "simhei.ttf",
+    ])
+    bold = _find([
+        "msyhbd.ttc", "Microsoft YaHei Bold.ttc",
+        "NotoSansSC-Bold.ttf", "NotoSansCJK-Bold.ttc",
+        "SourceHanSansCN-Bold.otf", "simhei.ttf",
+    ]) or sans
+    serif = _find([
+        "NotoSerifSC-VF.ttf", "NotoSerifSC-Regular.otf", "NotoSerifCJK-Regular.ttc",
+        "SourceHanSerifCN-Regular.otf", "simsun.ttc", "SimSun.ttf",
+        "Songti.ttc", "STSong.ttf",
+    ]) or bold
+
+    return {"serif": serif, "sans": sans or bold, "bold": bold}
 
 
 def _seed_from(nickname: str, uid: int | str, day: date) -> random.Random:
