@@ -16,8 +16,8 @@ ASTRBOT_REPO = "baichui/astrbot_plugin_wuwa_luck"
 
 # 更新时覆盖的代码文件；config.json / 用户数据不覆盖
 CODE_FILES = {
-    "nonebot": ["__init__.py", "data.py", "image.py", "config.py"],
-    "astrbot": ["main.py", "image.py", "wuwa_data.py", "metadata.yaml", "_conf_schema.json"],
+    "nonebot": ["__init__.py", "data.py", "image.py", "config.py", "updater.py"],
+    "astrbot": ["main.py", "image.py", "wuwa_data.py", "metadata.yaml", "_conf_schema.json", "updater.py"],
 }
 
 # 资源文件仅在缺失时补
