@@ -44,17 +44,26 @@ LINE = "#C9D8E4"
 BORDER = "#8FB8C8"
 
 
-def _font(path: Path, size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(str(path), size=size)
+def _font(path: Path | None, size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    if path is not None:
+        try:
+            return ImageFont.truetype(str(path), size=size)
+        except Exception:  # noqa: BLE001
+            pass
+    try:
+        return ImageFont.load_default(size=size)
+    except TypeError:
+        return ImageFont.load_default()
 
 
-def _pick_fonts() -> dict[str, Path]:
-    """按 OS 常见字体目录查找；插件 ttf/ 作兜底。"""
+def _pick_fonts() -> dict[str, Path | None]:
+    """按 OS 常见字体目录查找；找不到则返回 None，用 PIL 默认字体。"""
     dirs: list[Path] = []
     for d in (
         Path(r"C:\Windows\Fonts"),
         Path("/usr/share/fonts"),
         Path("/usr/local/share/fonts"),
+        Path("/system/fonts"),
         Path.home() / ".fonts",
         Path("/System/Library/Fonts"),
         Path("/Library/Fonts"),
@@ -70,11 +79,13 @@ def _pick_fonts() -> dict[str, Path]:
                 p = d / name
                 if p.is_file():
                     return p
-            # 子目录里再找一层（Linux 发行版常见）
             for d in dirs:
-                for p in d.rglob(name):
-                    if p.is_file():
-                        return p
+                try:
+                    for p in d.rglob(name):
+                        if p.is_file():
+                            return p
+                except Exception:  # noqa: BLE001
+                    continue
         return None
 
     sans = _find([
@@ -82,6 +93,7 @@ def _pick_fonts() -> dict[str, Path]:
         "NotoSansSC-VF.ttf", "NotoSansSC-Regular.otf", "NotoSansCJK-Regular.ttc",
         "SourceHanSansCN-Regular.otf", "WenQuanYi Micro Hei.ttf", "wqy-microhei.ttc",
         "PingFang.ttc", "Hiragino Sans GB.ttc", "simhei.ttf",
+        "DroidSansFallbackFull.ttf", "NotoSansCJKsc-Regular.otf",
     ])
     bold = _find([
         "msyhbd.ttc", "Microsoft YaHei Bold.ttc",
