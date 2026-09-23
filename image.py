@@ -73,6 +73,11 @@ def _pick_fonts() -> dict[str, Path | None]:
         if d.exists():
             dirs.append(d)
 
+    bundled = ASSETS / "font.ttf"
+    if bundled.is_file():
+        # 插件自带子集字体：手机/无中文字体环境也能出图
+        return {"serif": bundled, "sans": bundled, "bold": bundled}
+
     def _find(names: list[str]) -> Path | None:
         for name in names:
             for d in dirs:
@@ -282,20 +287,23 @@ def get_image(
 
     # 若有底图，极淡地铺一层纹理（不压暗文字区）
     bg_path = ASSETS / "bg.png"
-    if bg_path.exists():
-        tex = Image.open(bg_path).convert("RGBA").resize((CANVAS_W, CANVAS_H), Image.Resampling.LANCZOS)
-        # 盖掉生成图右下角「AI生成 / Xiaomi MiMo」水印：整块用左侧纹理+纸色覆盖
-        wm_w, wm_h = 420, 140
-        src_x = max(0, CANVAS_W - wm_w - 80)
-        patch = tex.crop((src_x, CANVAS_H - wm_h, src_x + wm_w, CANVAS_H))
-        tex.paste(patch, (CANVAS_W - wm_w, CANVAS_H - wm_h))
-        overlay = Image.new("RGBA", (wm_w + 40, wm_h + 20), (236, 244, 248, 230))
-        tex.alpha_composite(overlay, (CANVAS_W - wm_w - 20, CANVAS_H - wm_h - 10))
-        # 提亮 + 降透明，只作纸纹
-        white = Image.new("RGBA", tex.size, (255, 255, 255, 255))
-        tex = Image.blend(white, tex, alpha=0.12)
-        img = Image.alpha_composite(img, tex)
-        draw = ImageDraw.Draw(img, "RGBA")
+    try:
+        if bg_path.is_file():
+            tex = Image.open(bg_path).convert("RGBA").resize((CANVAS_W, CANVAS_H), Image.Resampling.LANCZOS)
+            # 盖掉生成图右下角「AI生成 / Xiaomi MiMo」水印：整块用左侧纹理+纸色覆盖
+            wm_w, wm_h = 420, 140
+            src_x = max(0, CANVAS_W - wm_w - 80)
+            patch = tex.crop((src_x, CANVAS_H - wm_h, src_x + wm_w, CANVAS_H))
+            tex.paste(patch, (CANVAS_W - wm_w, CANVAS_H - wm_h))
+            overlay = Image.new("RGBA", (wm_w + 40, wm_h + 20), (236, 244, 248, 230))
+            tex.alpha_composite(overlay, (CANVAS_W - wm_w - 20, CANVAS_H - wm_h - 10))
+            # 提亮 + 降透明，只作纸纹
+            white = Image.new("RGBA", tex.size, (255, 255, 255, 255))
+            tex = Image.blend(white, tex, alpha=0.12)
+            img = Image.alpha_composite(img, tex)
+            draw = ImageDraw.Draw(img, "RGBA")
+    except Exception:
+        pass
 
     # 外框（双线，青+金）
     _round_rect(draw, (18, 18, CANVAS_W - 18, CANVAS_H - 18), radius=22, fill=None, outline=GOLD, width=2)
