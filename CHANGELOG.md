@@ -2,7 +2,7 @@
 
 ## 1.0.2
 
-- 触发方式改为 `EventMessageType.ALL` 全局拦截（同千小妹插件）
+- 触发方式改为 `EventMessageType.ALL` 全局拦截
 - 不再依赖 `wake_prefix`：`/luck`、`luck`、`今日运势`、`#luck`、`小爱 luck` 均可直接触发
 - 命中后 `stop_event()`，不进入后续 LLM
 
